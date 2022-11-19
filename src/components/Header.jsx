@@ -8,21 +8,17 @@ const Header = () => {
 
   const inputRef = useRef();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
-    if (!username) {
-      inputRef.current.focus();
-      return;
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
     getAllDataUser(username);
     setUsername("");
-  };
-
-  useEffect(() => {
     inputRef.current.focus();
-  }, [handleSubmit]);
+  };
 
   return (
     <header className={styles.header_container}>
@@ -35,6 +31,7 @@ const Header = () => {
           value={username || ""}
           onChange={(e) => setUsername(e.target.value)}
           ref={inputRef}
+          required
         />
         <button type="submit">Buscar</button>
       </form>
