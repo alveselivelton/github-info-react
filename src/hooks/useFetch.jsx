@@ -1,7 +1,7 @@
 import { useUserContext } from "./useUserContext";
 
 export const useFecth = () => {
-  const { setUser, setUserRepositories } = useUserContext();
+  const { setUser, setUserRepositories, setLoading } = useUserContext();
 
   const api = "https://api.github.com/users/";
   const headers = {
@@ -31,9 +31,11 @@ export const useFecth = () => {
     }
   };
 
-  const getAllDataUser = (username) => {
-    getUser(username);
-    getUserRepositories(username);
+  const getAllDataUser = async (username) => {
+    setLoading(true);
+    await getUser(username);
+    await getUserRepositories(username);
+    setLoading(false);
   };
 
   return { getAllDataUser };
