@@ -1,23 +1,27 @@
 import { useUserContext } from "./useUserContext";
 
+const api = "https://api.github.com/users/";
+
+const headers = {
+  method: "GET",
+  headers: {
+    Accept: "application/vnd.github+json",
+  },
+};
+
 export const useFecth = () => {
   const { setUser, setUserRepositories, setLoading } = useUserContext();
 
-  const api = "https://api.github.com/users/";
-  const headers = {
-    method: "GET",
-    headers: {
-      Accept: "application/vnd.github+json",
-    },
-  };
-
   const getUser = async (username) => {
+    setLoading(true);
     try {
       const res = await fetch(`${api}${username}`, headers);
       const data = await res.json();
       setUser(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -31,12 +35,5 @@ export const useFecth = () => {
     }
   };
 
-  const getAllDataUser = async (username) => {
-    setLoading(true);
-    await getUser(username);
-    await getUserRepositories(username);
-    setLoading(false);
-  };
-
-  return { getAllDataUser };
+  return { getUser, getUserRepositories };
 };

@@ -1,25 +1,22 @@
 import styles from "./Header.module.css";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useFecth } from "../hooks/useFetch";
 import { useUserContext } from "../hooks/useUserContext";
 
 const Header = () => {
   const [username, setUsername] = useState("");
   const { setUser, setUserRepositories } = useUserContext();
-  const { getAllDataUser } = useFecth();
+  const { getUser, getUserRepositories } = useFecth();
 
   const inputRef = useRef();
 
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setUser("");
     setUserRepositories([]);
 
-    getAllDataUser(username);
+    await getUser(username);
+    getUserRepositories(username);
 
     setUsername("");
     inputRef.current.focus();
@@ -37,6 +34,7 @@ const Header = () => {
           onChange={(e) => setUsername(e.target.value)}
           ref={inputRef}
           required
+          autoFocus
         />
         <button type="submit">Buscar</button>
       </form>
